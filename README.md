@@ -7,11 +7,11 @@ Live: https://jadenlazo2020.github.io/pour-vida-mobile/
 
 | What | Where |
 |---|---|
-| Photos | Put in `images/` with these exact names: `hero-bar.jpg`, `about-drinks.jpg`, `gallery-1.jpg` to `gallery-5.jpg`. Until a file exists, its slot shows a beige placeholder with the filename. Update the `alt` text in `index.html` to describe the real photo. |
+| Photos | No event photos yet, so the hero arch shows the illustrated logo, About shows the cocktail menu card, and the gallery section is removed. When real photos exist, add a gallery back between Signature Sips and How It Works (the `.photo` placeholder styles are still in `css/styles.css`). |
 | Social share image | Add `images/og-image.jpg` (1200x630), then add `<meta property="og:image" content="https://jadenlazo2020.github.io/pour-vida-mobile/images/og-image.jpg">` in the `<head>` and change `twitter:card` to `summary_large_image`. |
-| Email & phone | Inquire section of `index.html` (currently placeholders) |
-| Inquiry form | Create a form at formspree.io with the client's email, replace `YOUR_FORM_ID` in `index.html` |
-| Service-area cities | FAQ, hero line ("from Merced to Visalia"), JSON-LD `areaServed` in `<head>`, and `llms.txt` |
+| Email & phone | Inquire section, FAQ, JSON-LD in `<head>`, `llms.txt`, and the email address in `js/main.js` |
+| Inquiry form | Until `YOUR_FORM_ID` in `index.html` is replaced with a Formspree form ID, Send Inquiry opens the visitor's email app with the details filled in, addressed to the client. |
+| Service-area cities | FAQ, hero line, About facts, JSON-LD `areaServed` in `<head>`, and `llms.txt` |
 | Drinks, packages, booking/deposit wording | Signature Sips, Packages, FAQ (and the FAQ JSON-LD in `<head>` so search results match) |
 
 ## If the client buys a domain

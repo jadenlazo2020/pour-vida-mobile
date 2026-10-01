@@ -90,8 +90,19 @@
       return;
     }
 
+    // No form service connected yet: open the visitor's email app with the inquiry filled in
     if (form.action.includes("YOUR_FORM_ID")) {
-      say("The form isn't connected yet. Send us a DM on Instagram at @pourvida_mobilebar for now.", "err");
+      const data = new FormData(form);
+      const labels = {
+        name: "Name", email: "Email", phone: "Phone", event_date: "Event date", event_type: "Event type",
+        guest_count: "Guest count", location: "City or venue", package: "Package", level: "Level", message: "Notes",
+      };
+      const lines = Object.entries(labels)
+        .filter(([key]) => data.get(key))
+        .map(([key, label]) => `${label}: ${data.get(key)}`);
+      const subject = `Event inquiry: ${data.get("event_type")} on ${data.get("event_date")}`;
+      window.location.href = `mailto:angalina62604@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
+      say("Your email app should open with your inquiry filled in. Press send there to reach us.", "ok");
       return;
     }
 
