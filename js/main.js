@@ -28,6 +28,47 @@
     btn.addEventListener("click", () => { pkgSelect.value = btn.dataset.package; })
   );
 
+  // Signature Sips: the menu card is a tab list; picking a drink redraws it on the stage
+  const tabs = [...document.querySelectorAll('.sips-list [role="tab"]')];
+  const stage = document.getElementById("sip-stage");
+  const drinks = {};
+  document.getElementById("drink-data").content.querySelectorAll("[data-drink]").forEach((d) => {
+    drinks[d.dataset.drink] = d.dataset;
+  });
+  const slot = (name) => stage.querySelector(`[data-slot="${name}"]`);
+  const selectDrink = (tab, focus) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+    });
+    if (focus) tab.focus();
+    const d = drinks[tab.dataset.drink];
+    stage.setAttribute("aria-labelledby", tab.id);
+    // Replacing the svg restarts its draw-in animation
+    slot("art").innerHTML = `<svg viewBox="0 0 200 220" class="line-art draw"><use href="#d-${d.drink}"/></svg>`;
+    slot("name").textContent = d.name;
+    slot("desc").textContent = d.desc;
+    slot("good").textContent = d.good;
+    const info = stage.querySelector(".sip-info");
+    info.classList.remove("swap");
+    void info.offsetWidth;
+    info.classList.add("swap");
+  };
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => selectDrink(tab, false));
+    tab.addEventListener("keydown", (e) => {
+      const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+      let next = null;
+      if (e.key in keys) next = tabs[(i + keys[e.key] + tabs.length) % tabs.length];
+      else if (e.key === "Home") next = tabs[0];
+      else if (e.key === "End") next = tabs[tabs.length - 1];
+      if (!next) return;
+      e.preventDefault();
+      selectDrink(next, true);
+    });
+  });
+
   // No past event dates
   const dateInput = document.querySelector('input[name="event_date"]');
   dateInput.min = new Date().toISOString().split("T")[0];
