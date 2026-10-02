@@ -7,7 +7,7 @@ Live: https://jadenlazo2020.github.io/pour-vida-mobile/
 
 | What | Where |
 |---|---|
-| Photos | No event photos yet, so the hero arch shows the illustrated logo, About shows the cocktail menu card, and the gallery section is removed. When real photos exist, add a gallery back between Signature Sips and How It Works (the `.photo` placeholder styles are still in `css/styles.css`). |
+| Photos | No event photos yet, so the hero arch shows the illustrated logo, and the gallery section is removed. When real photos exist, add a gallery back between Signature Sips and How It Works (the `.photo` placeholder styles are still in `css/styles.css`). |
 | Social share image | Add `images/og-image.jpg` (1200x630), then add `<meta property="og:image" content="https://jadenlazo2020.github.io/pour-vida-mobile/images/og-image.jpg">` in the `<head>` and change `twitter:card` to `summary_large_image`. |
 | Email & phone | Inquire section, FAQ, JSON-LD in `<head>`, `llms.txt`, and the email address in `js/main.js` |
 | Inquiry form | Until `YOUR_FORM_ID` in `index.html` is replaced with a Formspree form ID, Send Inquiry opens the visitor's email app with the details filled in, addressed to the client. |
