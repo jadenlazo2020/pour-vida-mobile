@@ -69,6 +69,31 @@
     });
   });
 
+  // Packages: level of service tabs show one level at a time
+  const lvlTabs = [...document.querySelectorAll('.level-tabs [role="tab"]')];
+  const pickLevel = (tab, focus) => {
+    lvlTabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+    if (focus) tab.focus();
+  };
+  lvlTabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => pickLevel(tab, false));
+    tab.addEventListener("keydown", (e) => {
+      const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      let next = null;
+      if (step) next = lvlTabs[(i + step + lvlTabs.length) % lvlTabs.length];
+      else if (e.key === "Home") next = lvlTabs[0];
+      else if (e.key === "End") next = lvlTabs[lvlTabs.length - 1];
+      if (!next) return;
+      e.preventDefault();
+      pickLevel(next, true);
+    });
+  });
+
   // No past event dates
   const dateInput = document.querySelector('input[name="event_date"]');
   dateInput.min = new Date().toISOString().split("T")[0];

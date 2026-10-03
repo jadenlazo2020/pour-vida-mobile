@@ -199,8 +199,12 @@
 
         <h3 class="pkg-step"><span class="script">Then,</span> the level of service</h3>
         <div class="levels">
-          <section class="level" aria-labelledby="lvl-essential">
-            <h4 id="lvl-essential">Essential</h4>
+          <div class="level-tabs" role="tablist" aria-label="Level of service">
+            <button role="tab" id="lvl-tab-essential" aria-controls="lvl-essential" aria-selected="true">Essential</button>
+            <button role="tab" id="lvl-tab-signature" aria-controls="lvl-signature" aria-selected="false" tabindex="-1">Signature</button>
+            <button role="tab" id="lvl-tab-elevated" aria-controls="lvl-elevated" aria-selected="false" tabindex="-1">Elevated</button>
+          </div>
+          <div class="level" id="lvl-essential" role="tabpanel" aria-labelledby="lvl-tab-essential" tabindex="0">
             <ul>
               <li>Bartending service, up to 4 hours</li>
               <li>Bar tools</li>
@@ -210,9 +214,8 @@
               <li>Alcohol shopping guide</li>
             </ul>
             <p class="level-you">You provide alcohol and mixers</p>
-          </section>
-          <section class="level" aria-labelledby="lvl-signature">
-            <h4 id="lvl-signature">Signature</h4>
+          </div>
+          <div class="level" id="lvl-signature" role="tabpanel" aria-labelledby="lvl-tab-signature" tabindex="0" hidden>
             <p class="level-plus">Everything in Essential, plus:</p>
             <ul>
               <li>2 to 3 signature cocktails of your choosing</li>
@@ -221,9 +224,8 @@
               <li>A second bartender with The Vida</li>
             </ul>
             <p class="level-you">You provide alcohol</p>
-          </section>
-          <section class="level" aria-labelledby="lvl-elevated">
-            <h4 id="lvl-elevated">Elevated</h4>
+          </div>
+          <div class="level" id="lvl-elevated" role="tabpanel" aria-labelledby="lvl-tab-elevated" tabindex="0" hidden>
             <p class="level-plus">Everything in Essential and Signature, plus:</p>
             <ul>
               <li>3 to 4 signature cocktails</li>
@@ -231,7 +233,7 @@
               <li>Bar styling to match your event theme</li>
             </ul>
             <p class="level-you">You provide alcohol</p>
-          </section>
+          </div>
         </div>
         <p class="pricing-note center">Pricing varies with your event details. Send an inquiry and we'll put together a quote.</p>
       </div>
