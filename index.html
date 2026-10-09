@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Parisienne&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=20261008c" />
 
   <script type="application/ld+json">
   {
@@ -151,16 +151,45 @@
     </div>
 
     <section class="section about" id="about" aria-labelledby="about-title">
-      <div class="container about-inner">
-        <h2 id="about-title">More than drinks. <span class="script">It's part of the celebration.</span></h2>
-        <p>Pour Vida started with a simple idea: the big days deserve a good bar. The name comes from <em>por vida</em>, for life.</p>
-        <p>We come to your venue or backyard, set up the bar, cut the fruit, pour all night and pack everything up at the end. You and your guests stay at the party.</p>
-        <dl class="about-facts">
-          <div><dt>You buy</dt><dd>The alcohol, at store prices</dd></div>
-          <div><dt>We bring</dt><dd>Bartenders, bar tools, setup and breakdown</dd></div>
-          <div><dt>We cover</dt><dd>Merced, Atwater, Madera, Chowchilla, Turlock</dd></div>
-        </dl>
-        <a href="#inquire" class="btn btn-dark">Check Your Date</a>
+      <div class="container about-grid">
+        <!-- Slideshow: one photo at a time, fading to the next every few seconds (js/main.js) -->
+        <div class="slideshow" role="group" aria-roledescription="slideshow" aria-label="Pour Vida cocktails">
+          <div class="slides">
+            <figure class="slide is-active">
+              <img src="images/photo-espresso-martini.jpg" alt="Espresso martini with a foam top and three coffee beans, a Pour Vida business card in front" width="900" height="1125" />
+              <figcaption>Espresso Martini</figcaption>
+            </figure>
+            <figure class="slide" aria-hidden="true">
+              <img src="images/photo-whisky-sour-lemon.jpg" alt="Whisky sour with a lemon peel garnish beside a lemon half and a Pour Vida card" width="900" height="1125" loading="lazy" />
+              <figcaption>Whisky Sour</figcaption>
+            </figure>
+            <figure class="slide" aria-hidden="true">
+              <img src="images/photo-espresso-martini-top.jpg" alt="Close-up from above of an espresso martini's foam and coffee beans" width="900" height="1125" loading="lazy" />
+              <figcaption>Espresso Martini</figcaption>
+            </figure>
+            <figure class="slide" aria-hidden="true">
+              <img src="images/photo-whisky-sour-card.jpg" alt="Whisky sour in a ribbed glass behind a Pour Vida Mobile Bar Services business card" width="900" height="1125" loading="lazy" />
+              <figcaption>Whisky Sour</figcaption>
+            </figure>
+          </div>
+          <div class="slide-dots">
+            <button type="button" aria-label="Show photo 1 of 4: Espresso Martini" aria-current="true"></button>
+            <button type="button" aria-label="Show photo 2 of 4: Whisky Sour"></button>
+            <button type="button" aria-label="Show photo 3 of 4: Espresso Martini"></button>
+            <button type="button" aria-label="Show photo 4 of 4: Whisky Sour"></button>
+          </div>
+        </div>
+        <div class="about-copy">
+          <h2 id="about-title">More than drinks. <span class="script">It's part of the celebration.</span></h2>
+          <p>Pour Vida started with a simple idea: the big days deserve a good bar. The name comes from <em>por vida</em>, for life.</p>
+          <p>We come to your venue or backyard, set up the bar, cut the fruit, pour all night and pack everything up at the end. You and your guests stay at the party.</p>
+          <dl class="about-facts">
+            <div><dt>You buy</dt><dd>The alcohol, at store prices</dd></div>
+            <div><dt>We bring</dt><dd>Bartenders, bar tools, setup and breakdown</dd></div>
+            <div><dt>We cover</dt><dd>Merced, Atwater, Madera, Chowchilla, Turlock</dd></div>
+          </dl>
+          <a href="#inquire" class="btn btn-dark">Check Your Date</a>
+        </div>
       </div>
     </section>
 
@@ -355,8 +384,12 @@
           </dl>
         </div>
 
-        <!-- Until YOUR_FORM_ID is replaced with a Formspree form ID, sending opens the visitor's email app addressed to Pour Vida (see js/main.js). -->
-        <form class="inquire-form" id="inquire-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
+        <!-- Web3Forms emails each inquiry to Pour Vida. The access key is meant to be public;
+             the receiving inbox is set in the Web3Forms dashboard. -->
+        <form class="inquire-form" id="inquire-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+          <input type="hidden" name="access_key" value="9ba7ac36-4418-46a2-b0f1-0174c6030528" />
+          <input type="hidden" name="subject" value="New Pour Vida inquiry" />
+          <input type="hidden" name="from_name" value="Pour Vida website" />
           <p class="script form-title" aria-hidden="true">Your event</p>
           <div class="field-row">
             <label>Full name<input type="text" name="name" required autocomplete="name" /></label>
@@ -401,7 +434,7 @@
             </select>
           </label>
           <label>Anything else we should know?<textarea name="message" rows="4"></textarea></label>
-          <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <button type="submit" class="btn btn-dark btn-block">Send Inquiry</button>
           <p class="form-status" role="status" aria-live="polite"></p>
         </form>
@@ -555,6 +588,6 @@
     </symbol>
   </svg>
 
-  <script src="js/main.js" defer></script>
+  <script src="js/main.js?v=20261008c" defer></script>
 </body>
 </html>

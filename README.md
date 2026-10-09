@@ -10,7 +10,7 @@ Live: https://jadenlazo2020.github.io/pour-vida-mobile/
 | Photos | No event photos yet, so the hero arch shows the illustrated logo, and the gallery section is removed. When real photos exist, add a gallery back between Signature Sips and How It Works (the `.photo` placeholder styles are still in `css/styles.css`). |
 | Social share image | Add `images/og-image.jpg` (1200x630), then add `<meta property="og:image" content="https://jadenlazo2020.github.io/pour-vida-mobile/images/og-image.jpg">` in the `<head>` and change `twitter:card` to `summary_large_image`. |
 | Email & phone | Inquire section, FAQ, JSON-LD in `<head>`, `llms.txt`, and the email address in `js/main.js` |
-| Inquiry form | Until `YOUR_FORM_ID` in `index.html` is replaced with a Formspree form ID, Send Inquiry opens the visitor's email app with the details filled in, addressed to the client. |
+| Inquiry form | Sends through Web3Forms (access key in the form in `index.html`). Change the receiving inbox in the Web3Forms dashboard, not in the code. |
 | Service-area cities | FAQ, hero line, About facts, JSON-LD `areaServed` in `<head>`, and `llms.txt` |
 | Drinks, packages, booking/deposit wording | Signature Sips, Packages, FAQ (and the FAQ JSON-LD in `<head>` so search results match) |
 

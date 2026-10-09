@@ -94,11 +94,43 @@
     });
   });
 
+  // Slideshow: fade to the next photo every 3 seconds. Pauses on hover or
+  // keyboard focus, and only advances on its own when reduced motion is off.
+  const show = document.querySelector(".slideshow");
+  if (show) {
+    const slides = [...show.querySelectorAll(".slide")];
+    const dots = [...show.querySelectorAll(".slide-dots button")];
+    let current = 0;
+    let timer = null;
+    const goTo = (n) => {
+      current = (n + slides.length) % slides.length;
+      slides.forEach((s, k) => {
+        s.classList.toggle("is-active", k === current);
+        if (k === current) s.removeAttribute("aria-hidden");
+        else s.setAttribute("aria-hidden", "true");
+      });
+      dots.forEach((d, k) => (k === current ? d.setAttribute("aria-current", "true") : d.removeAttribute("aria-current")));
+    };
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const stop = () => { clearInterval(timer); timer = null; };
+    const start = () => {
+      stop();
+      if (!still.matches && !document.hidden) timer = setInterval(() => goTo(current + 1), 3000);
+    };
+    dots.forEach((d, k) => d.addEventListener("click", () => { goTo(k); start(); }));
+    show.addEventListener("mouseenter", stop);
+    show.addEventListener("mouseleave", start);
+    show.addEventListener("focusin", stop);
+    show.addEventListener("focusout", start);
+    document.addEventListener("visibilitychange", start);
+    start();
+  }
+
   // No past event dates
   const dateInput = document.querySelector('input[name="event_date"]');
   dateInput.min = new Date().toISOString().split("T")[0];
 
-  // Inquiry form: validate, then submit to Formspree without leaving the page
+  // Inquiry form: validate, then send through Web3Forms without leaving the page
   const form = document.getElementById("inquire-form");
   const status = form.querySelector(".form-status");
   const say = (msg, kind) => { status.textContent = msg; status.className = "form-status " + kind; };
@@ -115,9 +147,11 @@
       return;
     }
 
-    // No form service connected yet: open the visitor's email app with the inquiry filled in
-    if (form.action.includes("YOUR_FORM_ID")) {
-      const data = new FormData(form);
+    const data = new FormData(form);
+    const subject = `Event inquiry: ${data.get("event_type")} on ${data.get("event_date")}`;
+
+    // No access key yet: open the visitor's email app with the inquiry filled in
+    if (data.get("access_key") === "YOUR_ACCESS_KEY") {
       const labels = {
         name: "Name", email: "Email", phone: "Phone", event_date: "Event date", event_type: "Event type",
         guest_count: "Guest count", location: "City or venue", package: "Package", level: "Level", message: "Notes",
@@ -125,7 +159,6 @@
       const lines = Object.entries(labels)
         .filter(([key]) => data.get(key))
         .map(([key, label]) => `${label}: ${data.get(key)}`);
-      const subject = `Event inquiry: ${data.get("event_type")} on ${data.get("event_date")}`;
       window.location.href = `mailto:angalina62604@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
       say("Your email app should open with your inquiry filled in. Press send there to reach us.", "ok");
       return;
@@ -135,12 +168,14 @@
     btn.disabled = true;
     btn.textContent = "Sending…";
     try {
+      data.set("subject", subject);
       const res = await fetch(form.action, {
         method: "POST",
-        body: new FormData(form),
+        body: data,
         headers: { Accept: "application/json" },
       });
-      if (!res.ok) throw new Error(res.status);
+      const result = await res.json();
+      if (!res.ok || !result.success) throw new Error(result.message || res.status);
       form.reset();
       say("Inquiry sent. We'll reply within a couple of days with availability and a quote.", "ok");
     } catch {
