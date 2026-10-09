@@ -13,4 +13,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://jadenlazo2020.github.io/pour-vida-mobile/sitemap.xml
+Sitemap: https://pourvidamobilebarservices.com/sitemap.xml

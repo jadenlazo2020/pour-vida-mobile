@@ -1,22 +1,22 @@
 # Pour Vida Mobile Bar Services website
 
 Static site (HTML/CSS/JS, no build step) hosted on GitHub Pages from `main` / root.
-Live: https://jadenlazo2020.github.io/pour-vida-mobile/
+Live: https://pourvidamobilebarservices.com/ (custom domain, bought on Spaceship; the `CNAME` file tells GitHub Pages to serve it)
 
 ## Swap in before launch
 
 | What | Where |
 |---|---|
 | Photos | No event photos yet, so the hero arch shows the illustrated logo, and the gallery section is removed. When real photos exist, add a gallery back between Signature Sips and How It Works (the `.photo` placeholder styles are still in `css/styles.css`). |
-| Social share image | Add `images/og-image.jpg` (1200x630), then add `<meta property="og:image" content="https://jadenlazo2020.github.io/pour-vida-mobile/images/og-image.jpg">` in the `<head>` and change `twitter:card` to `summary_large_image`. |
+| Social share image | Add `images/og-image.jpg` (1200x630), then add `<meta property="og:image" content="https://pourvidamobilebarservices.com/images/og-image.jpg">` in the `<head>` and change `twitter:card` to `summary_large_image`. |
 | Email & phone | Inquire section, FAQ, JSON-LD in `<head>`, `llms.txt`, and the email address in `js/main.js` |
 | Inquiry form | Sends through Web3Forms (access key in the form in `index.html`). Change the receiving inbox in the Web3Forms dashboard, not in the code. |
 | Service-area cities | FAQ, hero line, About facts, JSON-LD `areaServed` in `<head>`, and `llms.txt` |
 | Drinks, packages, booking/deposit wording | Signature Sips, Packages, FAQ (and the FAQ JSON-LD in `<head>` so search results match) |
 
-## If the client buys a domain
+## Custom domain
 
-Update the URL in: `<link rel="canonical">`, `og:url`, the JSON-LD `url`/`@id`/`logo`, `robots.txt`, `sitemap.xml`, `llms.txt`, and the home link in `404.html` (change `/pour-vida-mobile/` to `/`). Then add the domain under Settings > Pages > Custom domain.
+The site is served at pourvidamobilebarservices.com. DNS lives at Spaceship: four `A` records on `@` (185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153) and a `CNAME` on `www` pointing to `jadenlazo2020.github.io`. GitHub Pages reads the domain from the `CNAME` file in this repo; keep that file, or the site falls back to the github.io address. If the domain ever changes, update `CNAME`, the canonical link, `og:url`, the JSON-LD `@id`/`url`/`logo`, `robots.txt`, `sitemap.xml`, `llms.txt`, and the allowed domain in the Web3Forms dashboard.
 
 ## Other files
 
