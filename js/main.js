@@ -22,6 +22,32 @@
     if (e.key === "Escape" && nav.classList.contains("open")) { setNav(false); toggle.focus(); }
   });
 
+  // Click plus arrow/Home/End keys (wrapping) for a list of tabs; onPick(tab, focus) does the selecting
+  const initTablist = (tabs, onPick) => {
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => onPick(tab, false));
+      tab.addEventListener("keydown", (e) => {
+        const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+        let next = null;
+        if (step) next = tabs[(i + step + tabs.length) % tabs.length];
+        else if (e.key === "Home") next = tabs[0];
+        else if (e.key === "End") next = tabs[tabs.length - 1];
+        if (!next) return;
+        e.preventDefault();
+        onPick(next, true);
+      });
+    });
+  };
+
+  // Event ticker: two aria-hidden copies of the list fill the scrolling loop
+  const bandList = document.querySelector(".band-list");
+  for (let n = 0; n < 2; n++) {
+    const copy = bandList.cloneNode(true);
+    copy.removeAttribute("aria-label");
+    copy.setAttribute("aria-hidden", "true");
+    bandList.parentNode.appendChild(copy);
+  }
+
   // Package buttons preselect that package in the form
   const pkgSelect = document.getElementById("package-select");
   document.querySelectorAll("[data-package]").forEach((btn) =>
@@ -55,19 +81,7 @@
     void info.offsetWidth;
     info.classList.add("swap");
   };
-  tabs.forEach((tab, i) => {
-    tab.addEventListener("click", () => selectDrink(tab, false));
-    tab.addEventListener("keydown", (e) => {
-      const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
-      let next = null;
-      if (e.key in keys) next = tabs[(i + keys[e.key] + tabs.length) % tabs.length];
-      else if (e.key === "Home") next = tabs[0];
-      else if (e.key === "End") next = tabs[tabs.length - 1];
-      if (!next) return;
-      e.preventDefault();
-      selectDrink(next, true);
-    });
-  });
+  initTablist(tabs, selectDrink);
 
   // Packages: level of service tabs show one level at a time
   const lvlTabs = [...document.querySelectorAll('.level-tabs [role="tab"]')];
@@ -80,19 +94,7 @@
     });
     if (focus) tab.focus();
   };
-  lvlTabs.forEach((tab, i) => {
-    tab.addEventListener("click", () => pickLevel(tab, false));
-    tab.addEventListener("keydown", (e) => {
-      const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-      let next = null;
-      if (step) next = lvlTabs[(i + step + lvlTabs.length) % lvlTabs.length];
-      else if (e.key === "Home") next = lvlTabs[0];
-      else if (e.key === "End") next = lvlTabs[lvlTabs.length - 1];
-      if (!next) return;
-      e.preventDefault();
-      pickLevel(next, true);
-    });
-  });
+  initTablist(lvlTabs, pickLevel);
 
   // Slideshow: fade to the next photo every 3 seconds. Pauses on hover or
   // keyboard focus, and only advances on its own when reduced motion is off.
@@ -102,6 +104,8 @@
     const dots = [...show.querySelectorAll(".slide-dots button")];
     let current = 0;
     let timer = null;
+    let hovered = false;
+    let focused = false;
     const goTo = (n) => {
       current = (n + slides.length) % slides.length;
       slides.forEach((s, k) => {
@@ -115,20 +119,22 @@
     const stop = () => { clearInterval(timer); timer = null; };
     const start = () => {
       stop();
-      if (!still.matches && !document.hidden) timer = setInterval(() => goTo(current + 1), 3000);
+      if (!still.matches && !document.hidden && !hovered && !focused) timer = setInterval(() => goTo(current + 1), 3000);
     };
     dots.forEach((d, k) => d.addEventListener("click", () => { goTo(k); start(); }));
-    show.addEventListener("mouseenter", stop);
-    show.addEventListener("mouseleave", start);
-    show.addEventListener("focusin", stop);
-    show.addEventListener("focusout", start);
+    // Mouse only: touch taps fire a pointerenter with no matching leave. Focus pauses only for keyboard focus.
+    show.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hovered = true; stop(); } });
+    show.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") { hovered = false; start(); } });
+    show.addEventListener("focusin", (e) => { focused = e.target.matches(":focus-visible"); if (focused) stop(); });
+    show.addEventListener("focusout", () => { focused = false; start(); });
     document.addEventListener("visibilitychange", start);
     start();
   }
 
   // No past event dates
   const dateInput = document.querySelector('input[name="event_date"]');
-  dateInput.min = new Date().toISOString().split("T")[0];
+  const now = new Date();
+  dateInput.min = [now.getFullYear(), now.getMonth() + 1, now.getDate()].map((n) => String(n).padStart(2, "0")).join("-");
 
   // Inquiry form: validate, then send through Web3Forms without leaving the page
   const form = document.getElementById("inquire-form");
@@ -143,26 +149,17 @@
     if (invalid.length) {
       invalid.forEach((el) => el.setAttribute("aria-invalid", "true"));
       invalid[0].focus();
-      say("Please fill in your name, a valid email, the event date and the event type.", "err");
+      say(
+        invalid[0].validity.rangeUnderflow
+          ? "Pick today's date or a later one for your event."
+          : "Please fill in your name, a valid email, the event date and the event type.",
+        "err"
+      );
       return;
     }
 
     const data = new FormData(form);
     const subject = `Event inquiry: ${data.get("event_type")} on ${data.get("event_date")}`;
-
-    // No access key yet: open the visitor's email app with the inquiry filled in
-    if (data.get("access_key") === "YOUR_ACCESS_KEY") {
-      const labels = {
-        name: "Name", email: "Email", phone: "Phone", event_date: "Event date", event_type: "Event type",
-        guest_count: "Guest count", location: "City or venue", package: "Package", level: "Level", message: "Notes",
-      };
-      const lines = Object.entries(labels)
-        .filter(([key]) => data.get(key))
-        .map(([key, label]) => `${label}: ${data.get(key)}`);
-      window.location.href = `mailto:angalina62604@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
-      say("Your email app should open with your inquiry filled in. Press send there to reach us.", "ok");
-      return;
-    }
 
     const btn = form.querySelector('button[type="submit"]');
     btn.disabled = true;

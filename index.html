@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Parisienne&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=20261008c" />
+  <link rel="stylesheet" href="css/styles.css" />
 
   <script type="application/ld+json">
   {
@@ -131,11 +131,9 @@
 
     <!-- Event band with papel picado strung beneath it -->
     <div class="band">
-      <!-- Scrolling list of events: the first copy is the real list, the two copies after it fill the loop -->
+      <!-- Scrolling list of events: js/main.js appends two aria-hidden copies to fill the loop -->
       <div class="marquee">
         <ul class="band-list" aria-label="Events we serve"><li>Weddings</li><li>Birthdays</li><li>Quinceañeras</li><li>Showers</li><li>Corporate Events</li><li>Private Parties</li><li>Mocktails</li></ul>
-        <ul class="band-list" aria-hidden="true"><li>Weddings</li><li>Birthdays</li><li>Quinceañeras</li><li>Showers</li><li>Corporate Events</li><li>Private Parties</li><li>Mocktails</li></ul>
-        <ul class="band-list" aria-hidden="true"><li>Weddings</li><li>Birthdays</li><li>Quinceañeras</li><li>Showers</li><li>Corporate Events</li><li>Private Parties</li><li>Mocktails</li></ul>
       </div>
       <svg class="picado" width="100%" height="84" aria-hidden="true" focusable="false">
         <defs>
@@ -278,18 +276,20 @@
         <div class="sips-grid">
           <div class="sips-card">
             <p class="script sips-title" aria-hidden="true">Cocktail<br />Menu</p>
-            <p class="sips-group" id="grp-specialties">The specialties</p>
-            <div class="sips-list" role="tablist" aria-labelledby="grp-specialties" aria-orientation="vertical">
+            <div role="tablist" aria-label="Cocktail menu" aria-orientation="vertical">
+            <p class="sips-group">The specialties</p>
+            <div class="sips-list">
               <button role="tab" id="tab-elderflower" aria-controls="sip-stage" aria-selected="true" data-drink="elderflower"><strong>Elderflower Sour</strong><span>Elderflower, lemon, vodka, mint, blueberries</span></button>
               <button role="tab" id="tab-hibiscus" aria-controls="sip-stage" aria-selected="false" tabindex="-1" data-drink="hibiscus"><strong>Hibiscus Marg</strong><span>Blanco tequila, hibiscus, orange, lime</span></button>
               <button role="tab" id="tab-spritz" aria-controls="sip-stage" aria-selected="false" tabindex="-1" data-drink="spritz"><strong>Strawberry Limoncello Spritz</strong><span>Prosecco, limoncello, strawberry</span></button>
             </div>
-            <p class="sips-group" id="grp-classics">The classics</p>
-            <div class="sips-list" role="tablist" aria-labelledby="grp-classics" aria-orientation="vertical">
+            <p class="sips-group">The classics</p>
+            <div class="sips-list">
               <button role="tab" id="tab-margarita" aria-controls="sip-stage" aria-selected="false" tabindex="-1" data-drink="margarita"><strong>Margarita</strong><span>Blanco tequila, lime, triple sec, salt rim</span></button>
               <button role="tab" id="tab-sour" aria-controls="sip-stage" aria-selected="false" tabindex="-1" data-drink="sour"><strong>Whisky Sour</strong><span>Bourbon, lemon, simple syrup</span></button>
               <button role="tab" id="tab-french75" aria-controls="sip-stage" aria-selected="false" tabindex="-1" data-drink="french75"><strong>French 75</strong><span>Gin, lemon, Champagne</span></button>
               <button role="tab" id="tab-espresso" aria-controls="sip-stage" aria-selected="false" tabindex="-1" data-drink="espresso"><strong>Espresso Martini</strong><span>Vodka, espresso, Kahlúa</span></button>
+            </div>
             </div>
             <p class="sips-foot">Menu can be personalized for events</p>
           </div>
@@ -385,7 +385,8 @@
         </div>
 
         <!-- Web3Forms emails each inquiry to Pour Vida. The access key is meant to be public;
-             the receiving inbox is set in the Web3Forms dashboard. -->
+             the receiving inbox is set in the Web3Forms dashboard.
+             Also restrict the key to this domain and turn on captcha there (see README). -->
         <form class="inquire-form" id="inquire-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
           <input type="hidden" name="access_key" value="9ba7ac36-4418-46a2-b0f1-0174c6030528" />
           <input type="hidden" name="subject" value="New Pour Vida inquiry" />
@@ -588,6 +589,6 @@
     </symbol>
   </svg>
 
-  <script src="js/main.js?v=20261008c" defer></script>
+  <script src="js/main.js" defer></script>
 </body>
 </html>
